@@ -1,24 +1,24 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['arrivedAt']) && isset($_POST['leavedAt'])) {
+        $arrivedAt = $_POST['arrivedAt'];
+        $leavedAt = $_POST['leavedAt'];
 
-declare(strict_types=1);
+        $arrivedAtTime = strtotime($arrivedAt);
+        $leavedAtTime = strtotime($leavedAt);
 
-class Daily
-{
-    const int WORK_DURATION = 540;
+        if ($arrivedAtTime && $leavedAtTime) {
+            $difference = $leavedAtTime - $arrivedAtTime;
+            $hours = floor($difference / 3600);
+            $minutes = floor(($difference % 3600) / 60);
 
-    public string $date;
-    public string $arrivedAt;
-    public string $leavedAt;
-
-    public function calculate(
-        string $date,
-        string $arrivedAt,
-        string $leavedAt
-    ) {
-        $dailyWorkingHours = $leavedAt->diff($arrivedAt);
+            echo sprintf('%02d:%02d', $hours, $minutes);
+        } else {
+            echo "Vaqt formati noto'g'ri.";
+        }
+    } else {
+        echo "Iltimos, kelish va ketish vaqtlarini ko'rsating.";
     }
+} else {
+    echo "So'rov usuli noto'g'ri.";
 }
-
-$today = new Daily();
-$today->calculate('20.06.2024', '11:00:00', '16:00:00');
-
